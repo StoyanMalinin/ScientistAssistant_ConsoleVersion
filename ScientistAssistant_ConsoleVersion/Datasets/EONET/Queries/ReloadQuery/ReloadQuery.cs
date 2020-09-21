@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ScientistAssistant_ConsoleVersion.CommunicatonModule;
 using ScientistAssistant_ConsoleVersion.Datasets;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries;
 
-namespace ScientistAssistant_ConsoleVersion.UI.Queries.ReloadQuery
+namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReloadQuery
 {
     interface IReloadQuery : IQuery
     {

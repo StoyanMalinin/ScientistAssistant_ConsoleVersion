@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScientistAssistant_ConsoleVersion.UI.Queries
+namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries
 {
     interface IQuery
     {

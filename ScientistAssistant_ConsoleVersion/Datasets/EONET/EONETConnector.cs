@@ -7,39 +7,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 
-namespace ScientistAssistant_ConsoleVersion.CommunicatonModule
+namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 {
-    class Geometry
-    {
-        public string type { get; set; }
-        public Newtonsoft.Json.Linq.JArray coordinates { get; set; }
-    }
-
-    class Category
-    {
-        public string id { get; set; }
-        public string title { get; set; }
-    }
-
-    class Source
-    {
-        public string id { get; set; }
-        public string url { get; set; }
-    }
-
-    class Event
-    {
-        public string id { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public string link { get; set; }
-
-        public List<Source> sources { get; set; }
-        public List<Geometry> geometry { get; set; }
-        public List<Category> categories { get; set; }
-    }
-
     static class EONETConnector
     {
         class EventsWrapper  

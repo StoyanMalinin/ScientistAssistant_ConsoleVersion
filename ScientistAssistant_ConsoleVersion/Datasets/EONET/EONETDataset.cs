@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ScientistAssistant_ConsoleVersion.Datasets;
-using ScientistAssistant_ConsoleVersion.CommunicatonModule;
 using System.Net.Http.Headers;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReloadQuery;
 
-namespace ScientistAssistant_ConsoleVersion.Datasets
+namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 {
     class EONETDataset : IDataset
     {
-        Dictionary<string, UI.Queries.IQuery> queries = new Dictionary<string, UI.Queries.IQuery>();
+        Dictionary<string, Queries.IQuery> queries = new Dictionary<string, Queries.IQuery>();
 
         public EONETDataset()
         {
-            queries["reload"] = new UI.Queries.ReloadQuery.ReloadQuery();  
-            
+            queries["reload"] = new ReloadQuery();  
+            queries["print"] = new PrintQuery();  
         }
 
         public static List<Event> events = new List<Event>();
