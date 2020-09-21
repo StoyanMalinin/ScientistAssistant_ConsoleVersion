@@ -54,23 +54,7 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
         public void execute(List<string> flags)
         {
             List<Event> matching = EONETDataset.events;
-
-            foreach(string s in flags)
-            {
-                List<string> elements = s.Split('-').ToList();
-
-                string type = elements[0];
-                elements.RemoveAt(0);
-
-                if (mp.checkKey(type) == true)
-                {
-                    matching = mp.getFunction(type)(matching, elements);
-                }
-                else
-                {
-
-                }
-            }
+            matching = GenericOperations.filterList(matching, flags, mp);
 
             printList(matching);
             Console.WriteLine($"MatchingCount: {matching.Count}");

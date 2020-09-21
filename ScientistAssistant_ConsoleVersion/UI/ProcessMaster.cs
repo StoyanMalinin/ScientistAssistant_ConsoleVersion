@@ -12,7 +12,20 @@ namespace ScientistAssistant_ConsoleVersion.UI
 
             while(true)
             {
-                ih.handleInput();
+                try
+                {
+                    ih.handleInput();
+                }
+                catch(CustomUIException e)
+                {
+                    Console.WriteLine("Invalid command");
+                    Console.WriteLine(e.Message);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("Invalid command");
+                    Console.WriteLine("Unhandled syntax error or a potential bug");
+                }
             }
         }
     }

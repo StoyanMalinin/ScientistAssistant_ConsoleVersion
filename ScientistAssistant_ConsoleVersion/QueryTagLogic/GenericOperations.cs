@@ -35,6 +35,29 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 
     static class GenericOperations
     {
+        public static List<T> filterList<T>(List<T> all, List<string> flags, FilteringFunctionDictionary<T> mp) where T: class
+        {
+            List<T> matching = all;
+            foreach (string s in flags)
+            {
+                List<string> elements = s.Split('-').Where(x => x!="").ToList();
+
+                string type = elements[0];
+                elements.RemoveAt(0);
+
+                if (mp.checkKey(type) == true)
+                {
+                    matching = mp.getFunction(type)(matching, elements);
+                }
+                else
+                {
+
+                }
+            }
+
+            return matching;
+        }
+
         public static List<T> filterListByProperties<T>(List<T> all, List<string> properties) where T: class
         {
             List<LogicNode> requirements = new List<LogicNode>();

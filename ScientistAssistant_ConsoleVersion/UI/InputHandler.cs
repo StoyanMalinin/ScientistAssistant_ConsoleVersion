@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET;
+using ScientistAssistant_ConsoleVersion.UI;
 
 namespace ScientistAssistant_ConsoleVersion.UI
 {
@@ -36,9 +37,13 @@ namespace ScientistAssistant_ConsoleVersion.UI
             string dataset = flags[0];
             flags.RemoveAt(0);
 
-            if(datasets.ContainsKey(dataset) ==true)
+            if (datasets.ContainsKey(dataset) == true)
             {
                 datasets[dataset].processQuery(flags);
+            }
+            else
+            {
+                throw new InvalidDatasetException(dataset);
             }
         }
     }
