@@ -8,9 +8,11 @@ namespace ScientistAssistant_ConsoleVersion.UI
     {
         public static void loop()
         {
+            InputHandler ih = new InputHandler();
+
             while(true)
             {
-
+                ih.handleInput();
             }
         }
     }

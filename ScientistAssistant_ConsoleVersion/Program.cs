@@ -9,7 +9,7 @@ namespace ScientistAssistant_ConsoleVersion
     {
         static void Main(string[] args)
         {
-
+            UI.ProcessMaster.loop();
         }
     }
 }
