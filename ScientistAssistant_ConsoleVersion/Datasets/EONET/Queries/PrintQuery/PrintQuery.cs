@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using ScientistAssistant_ConsoleVersion.QueryTagLogic;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
+using System.Data;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
 {
@@ -22,7 +23,7 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
         {
             queries["events"] = new PrintEventsQuery();
         }
-
+        
         public void execute(List<string> flags)
         {
             string printType = flags[0];
@@ -37,7 +38,14 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
 
     class PrintEventsQuery : IPrintQuery
     {
-        private void printList(List <DatasetClasses.Event> l)
+        FilteringFunctionDictionary<Event> mp = new FilteringFunctionDictionary<Event>();
+
+        public PrintEventsQuery()
+        {
+            mp.addFun("properties", GenericOperations.filterListByProperties);
+        }
+
+        private void printList(List <Event> l)
         {
             foreach (Event e in l)
                 Console.WriteLine(e.ToString());
@@ -45,47 +53,27 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
 
         public void execute(List<string> flags)
         {
-            if (flags.Count == 0)
+            List<Event> matching = EONETDataset.events;
+
+            foreach(string s in flags)
             {
-                Console.WriteLine("All events:");
-                printList(EONETDataset.events);
-            }
-            else
-            {
-                List<string> filters = flags[0].Split('-').ToList();
+                List<string> elements = s.Split('-').ToList();
 
-                List<LogicNode> requirements = new List<LogicNode>();
-                foreach(string f in filters)
+                string type = elements[0];
+                elements.RemoveAt(0);
+
+                if (mp.checkKey(type) == true)
                 {
-                    Console.Write($"Requiremets for {f}: ");
-                    string s = Console.ReadLine();
-
-                    requirements.Add(LogicConstructor.constructLogicTree(s));
-                    Console.WriteLine($"A more explicit version: {requirements.Last()}");
+                    matching = mp.getFunction(type)(matching, elements);
                 }
-
-                List<Event> matching = new List<Event>();
-                foreach(Event e in EONETDataset.events)
+                else
                 {
-                    bool fail = false;
-                    for(int i = 0;i<filters.Count;i++)
-                    {
-                        if(requirements[i].checkObject<Event>(e, filters[i])==false)
-                        {
-                            fail = true;
-                            break;
-                        }
-                        
-                    }
 
-                    if (fail == false) matching.Add(e);
                 }
-
-                Console.WriteLine("Matching events:");
-                printList(matching);
             }
+
+            printList(matching);
+            Console.WriteLine($"MatchingCount: {matching.Count}");
         }
-
-
     }
 }
