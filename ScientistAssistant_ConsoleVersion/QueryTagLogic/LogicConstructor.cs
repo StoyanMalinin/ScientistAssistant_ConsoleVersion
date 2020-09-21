@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScientistAssistant_ConsoleVersion.UI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -155,14 +156,17 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             public bool checkProperty<T>(T curr, string propertyName, string x) where T : class
             {
                 List<string> candidates = new List<string>();
-
                 if (propertyName.Contains('.') == false)
                 {
-                    PropertyInfo p = curr.GetType().GetProperties().First(x => x.Name == propertyName);
+                    PropertyInfo p = curr.GetType().GetProperties().FirstOrDefault(x => x.Name == propertyName);
 
                     if (p != null)
                     {
                         candidates.Add(p.GetValue(curr) as string);
+                    }
+                    else
+                    {
+                        throw new WrongPropertyNameException(propertyName);
                     }
                 }
                 else
@@ -172,7 +176,16 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 
                     if (p0 != null)
                     {
-                        IEnumerable<object> l = (p0.GetValue(curr)) as IEnumerable<object>;
+                        IEnumerable<object> l = null;
+                        try
+                        {
+                            l = (p0.GetValue(curr)) as IEnumerable<object>;
+                        }
+                        catch
+                        {
+                            throw new WrongPropertyNameException(propertyName);
+                        }
+                        
                         foreach (object item in l)
                         {
                             PropertyInfo p1 = item.GetType().GetProperties().FirstOrDefault(x => x.Name == path[1]);
@@ -180,7 +193,15 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
                             {
                                 candidates.Add(p1.GetValue(item) as string);
                             }
+                            else
+                            {
+                                throw new WrongPropertyNameException(propertyName);
+                            }
                         }
+                    }
+                    else
+                    {
+                        throw new WrongPropertyNameException(propertyName);
                     }
                 }
 

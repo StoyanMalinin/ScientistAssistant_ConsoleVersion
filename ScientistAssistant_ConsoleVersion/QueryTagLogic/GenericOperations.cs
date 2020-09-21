@@ -5,6 +5,7 @@ using System.Text;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET;
 using System.Runtime.InteropServices.ComTypes;
+using ScientistAssistant_ConsoleVersion.UI;
 
 namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 {
@@ -51,7 +52,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
                 }
                 else
                 {
-
+                    throw new WrongFilterException(type);
                 }
             }
 
@@ -81,7 +82,6 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
                         fail = true;
                         break;
                     }
-
                 }
 
                 if (fail == false) matching.Add(item);

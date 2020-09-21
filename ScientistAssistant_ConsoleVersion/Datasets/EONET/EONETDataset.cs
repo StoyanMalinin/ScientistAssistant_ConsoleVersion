@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReloadQuery;
+using ScientistAssistant_ConsoleVersion.UI;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 {
@@ -22,12 +23,24 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 
         public void processQuery(List<string> flags)
         {
-            string queryType = flags[0];
-            flags.RemoveAt(0);
-
-            if(queries.ContainsKey(queryType)==true)
+            if (flags.Count > 0)
             {
-                queries[queryType].execute(flags);
+                string queryType = flags[0];
+                flags.RemoveAt(0);
+
+                if (queries.ContainsKey(queryType) == true)
+                {
+                    queries[queryType].execute(flags);
+                }
+                else
+                {
+                    throw new WrongFlagException(queryType);
+                }
+            }
+            else
+            {
+                
+                throw new InsufficientNumberOfFlagsException();
             }
         }
     }

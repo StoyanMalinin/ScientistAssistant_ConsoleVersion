@@ -7,6 +7,7 @@ using System.Text;
 using ScientistAssistant_ConsoleVersion.QueryTagLogic;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 using System.Data;
+using ScientistAssistant_ConsoleVersion.UI;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
 {
@@ -26,12 +27,23 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
         
         public void execute(List<string> flags)
         {
-            string printType = flags[0];
-            flags.RemoveAt(0);
-
-            if(queries.ContainsKey(printType)==true)
+            if (flags.Count > 0)
             {
-                queries[printType].execute(flags);
+                string printType = flags[0];
+                flags.RemoveAt(0);
+
+                if (queries.ContainsKey(printType) == true)
+                {
+                    queries[printType].execute(flags);
+                }
+                else
+                {
+                    throw new WrongFlagException(printType);
+                }
+            }
+            else
+            {
+                throw new InsufficientNumberOfFlagsException();
             }
         }
     }
