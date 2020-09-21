@@ -23,12 +23,20 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReloadQuery
 
         public void execute(List<string> flags)
         {
-            string reloadType = flags[0];
-            flags.RemoveAt(0);
-
-            if (queries.ContainsKey(reloadType) == true)
+            if (flags.Count > 0)
             {
-                queries[reloadType].execute(flags);
+                string reloadType = flags[0];
+                flags.RemoveAt(0);
+
+                if (queries.ContainsKey(reloadType) == true)
+                {
+                    queries[reloadType].execute(flags);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<string, IReloadQuery> item in queries)
+                    item.Value.execute(flags);
             }
         }
     }

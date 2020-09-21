@@ -65,7 +65,7 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
 
         public override string ToString()
         {
-            string output = "-------------\n";
+            string output = "----------------------------\n";
             output += $"id: {id}\n";
             output += $"title: {title}\n";
             output += $"description: {title}\n";
