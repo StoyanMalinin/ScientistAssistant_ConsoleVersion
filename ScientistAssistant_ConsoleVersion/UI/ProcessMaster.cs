@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ScientistAssistant_ConsoleVersion.UI
@@ -25,6 +26,10 @@ namespace ScientistAssistant_ConsoleVersion.UI
                 {
                     Console.WriteLine("Invalid command");
                     Console.WriteLine("Unhandled syntax error or a potential bug");
+
+                    Console.WriteLine();
+                    Console.WriteLine("More еxception info:");
+                    Console.WriteLine(e.Message);
                 }
             }
         }

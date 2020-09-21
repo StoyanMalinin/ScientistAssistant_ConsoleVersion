@@ -150,7 +150,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 
             public bool checkObject<T>(T x, string propertyName) where T : class
             {
-                return checkProperty<T>(x, propertyName, val.val);
+                return checkProperty(x, propertyName, val.val);
             }
 
             public bool checkProperty<T>(T curr, string propertyName, string x) where T : class
