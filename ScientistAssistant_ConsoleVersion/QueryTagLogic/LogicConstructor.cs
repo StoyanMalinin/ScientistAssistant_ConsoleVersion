@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Schema;
 
 namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 {
+    public interface LogicNode
+    {
+        bool checkObject<T>(T x, string propertyName) where T : class;
+    }
+
     static class LogicConstructor
     {
         interface ExpressionTerm
@@ -75,16 +82,21 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             }
         }
 
-        public interface LogicNode
-        {
-            
-        }
-
         class BinaryNode : LogicNode
         {
             public Operation op { get; set; }
             public LogicNode L { get; set; }
             public LogicNode R { get; set; }
+
+            public bool checkObject<T>(T x, string propertyName) where T : class
+            {
+                bool lVal = L.checkObject(x, propertyName);
+                bool rVal = R.checkObject(x, propertyName);
+
+                if (op.type == '|') return (lVal | rVal);
+                if (op.type == '&') return (lVal & rVal);
+                return false;
+            }
 
             public override string ToString()
             {
@@ -104,6 +116,11 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
         {
             public bool invert { get; set; }
             public LogicNode child { get; set; }
+
+            public bool checkObject<T>(T x, string propertyName) where T : class
+            {
+                return child.checkObject(x, propertyName) ^ invert;
+            }
 
             public override string ToString()
             {
@@ -128,6 +145,46 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             public override string ToString()
             {
                 return $"{val}";
+            }
+
+            public bool checkObject<T>(T x, string propertyName) where T : class
+            {
+                return checkProperty<T>(x, propertyName, val.val);
+            }
+
+            public bool checkProperty<T>(T curr, string propertyName, string x) where T : class
+            {
+                List<string> candidates = new List<string>();
+
+                if (propertyName.Contains('.') == false)
+                {
+                    PropertyInfo p = curr.GetType().GetProperties().First(x => x.Name == propertyName);
+
+                    if (p != null)
+                    {
+                        candidates.Add(p.GetValue(curr) as string);
+                    }
+                }
+                else
+                {
+                    string[] path = propertyName.Split('.');
+                    PropertyInfo p0 = curr.GetType().GetProperties().FirstOrDefault(x => x.Name == path[0]);
+
+                    if (p0 != null)
+                    {
+                        IEnumerable<object> l = (p0.GetValue(curr)) as IEnumerable<object>;
+                        foreach (object item in l)
+                        {
+                            PropertyInfo p1 = item.GetType().GetProperties().FirstOrDefault(x => x.Name == path[1]);
+                            if (p1 != null)
+                            {
+                                candidates.Add(p1.GetValue(item) as string);
+                            }
+                        }
+                    }
+                }
+
+                return candidates.Contains(x);
             }
         }
 
