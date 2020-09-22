@@ -7,23 +7,25 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
 {
     class Geometry
     {
         public string type { get; set; }
-        public Newtonsoft.Json.Linq.JArray coordinates { get; set; }
+        public JArray coordinates { get; set; }
 
-        private string arrToString(Newtonsoft.Json.Linq.JArray arr)
+        private string arrToString(JArray arr)
         {
             if (arr.Count == 0) return "";
 
             List<string> parts = new List<string>();
             foreach(object item in arr)
             {
-                if (item.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-                    parts.Add(arrToString(item as Newtonsoft.Json.Linq.JArray));
+                if (item.GetType() == typeof(JArray))
+                    parts.Add(arrToString(item as JArray));
                 else
                     parts.Add(item.ToString());
             }
@@ -45,10 +47,10 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
                                              Newtonsoft.Json.Linq.JArray arr)
         {
             if (arr.Count == 0) return true;
-            if(arr[0].GetType()==typeof(Newtonsoft.Json.Linq.JArray))
+            if(arr[0].GetType()==typeof(JArray))
             {
                 bool fail = false;
-                foreach(Newtonsoft.Json.Linq.JArray item in arr)
+                foreach(JArray item in arr)
                 {
                     if(checkInsideRectInternal(minLatitude, maxLatitude, minLongtitude, maxLongtitude, item)==false)
                     {
@@ -76,6 +78,32 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
         {
             return checkInsideRectInternal(minLatitude, maxLatitude, minLongtitude, maxLongtitude, coordinates);
         }
+
+        private double getAverageCoordinateInternal(JArray arr, int cInd)
+        {
+            if (arr.Count == 0) return 0;
+            
+            double sum = 0;
+            if (arr[0].GetType() == typeof(JArray))
+            {
+                foreach (JArray item in arr)
+                {
+                    sum += getAverageCoordinateInternal(item, cInd);
+                }
+
+                return sum / arr.Count;
+            }
+            else
+            {
+                sum += (double)arr[cInd];
+                return sum;
+            }
+        }
+
+        public double getAverageCoordinate(int cInd)
+        {
+            return getAverageCoordinateInternal(coordinates, cInd);
+        }
     }
 
     class Category : InformationObject
@@ -100,6 +128,11 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
         public List<Source> sources { get; set; }
         public List<Geometry> geometry { get; set; }
         public List<Category> categories { get; set; }
+
+        public double getAverageCoordinate(int cInd)
+        {
+            return geometry[0].getAverageCoordinate(cInd);
+        }
 
         public bool checkInsideRect(double minLatitude, double maxLatitude, 
                                     double minLongtitude, double maxLongtitude, int cnt)

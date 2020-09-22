@@ -18,7 +18,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
         public string id { get; set; }
     }
 
-    class FilteringFunctionDictionary<T> where T: class
+    class FilteringFunctionDictionary<T> where T: InformationObject
     {
         Dictionary<string, Func<List<T>, List<string>, List<T>>> mp;
 
@@ -45,7 +45,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 
     static class GenericOperations
     {
-        public static List<T> filterList<T>(List<T> all, List<string> flags, FilteringFunctionDictionary<T> mp) where T: class
+        public static List<T> filterList<T>(List<T> all, List<string> flags, FilteringFunctionDictionary<T> mp) where T: InformationObject
         {
             List<T> matching = all;
             foreach (string s in flags)
@@ -90,7 +90,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             }
         }
 
-        public static List<T> filterListByProperties<T>(List<T> all, List<string> properties) where T: class
+        public static List<T> filterListByProperties<T>(List<T> all, List<string> properties) where T: InformationObject
         {
             List<LogicNode> requirements = new List<LogicNode>();
             foreach (string f in properties)
@@ -147,7 +147,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             return matching;
         }
 
-        public static List <Event> filterListByPosition(List <Event> all, List <string> flags)
+        public static List<Event> filterListByPosition(List<Event> all, List<string> flags)
         {
             static double readDouble(string txt)
             {

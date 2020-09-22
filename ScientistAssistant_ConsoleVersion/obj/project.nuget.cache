@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Mq4dom5giBFRnrO54I0cCUZ/YH/h6WI3e+2Ai75iQOV4bOkYseTQi+F4PKTR5LIoWpyxtRsZm2QaHVNjYMHUYg==",
+  "dgSpecHash": "v6e8BfLP44DSWZm3oQARU5ztH8qQ7lUKCUY6j+s5gr81GbdfsfXtyP33y7IhVERx+gXOtR/D/0RyeTcCDwZjyA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Stoyan\\source\\repos\\ScientistAssistant_ConsoleVersion\\ScientistAssistant_ConsoleVersion\\ScientistAssistant_ConsoleVersion.csproj",
+  "projectFilePath": "C:\\Users\\Stoyan\\source\\repos\\scientific assistant\\ScientistAssistant_ConsoleVersion\\ScientistAssistant_ConsoleVersion\\ScientistAssistant_ConsoleVersion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Stoyan\\.nuget\\packages\\geojson.net\\1.2.19\\geojson.net.1.2.19.nupkg.sha512",
     "C:\\Users\\Stoyan\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"

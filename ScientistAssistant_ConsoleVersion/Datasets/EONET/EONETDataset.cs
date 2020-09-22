@@ -6,6 +6,7 @@ using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReloadQuery;
 using ScientistAssistant_ConsoleVersion.UI;
+using ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.ReportQuery;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 {
@@ -15,6 +16,7 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 
         public EONETDataset()
         {
+            queries["report"] = new ReportQuery();  
             queries["reload"] = new ReloadQuery();  
             queries["print"] = new PrintQuery();  
         }

@@ -11,9 +11,9 @@ using System.Xml.Schema;
 
 namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
 {
-    public interface LogicNode
+    interface LogicNode
     {
-        bool checkObject<T>(T x, string propertyName) where T : class;
+        bool checkObject<T>(T x, string propertyName) where T : InformationObject;
     }
 
     static class LogicConstructor
@@ -89,7 +89,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             public LogicNode L { get; set; }
             public LogicNode R { get; set; }
 
-            public bool checkObject<T>(T x, string propertyName) where T : class
+            public bool checkObject<T>(T x, string propertyName) where T : InformationObject
             {
                 bool lVal = L.checkObject(x, propertyName);
                 bool rVal = R.checkObject(x, propertyName);
@@ -118,7 +118,7 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             public bool invert { get; set; }
             public LogicNode child { get; set; }
 
-            public bool checkObject<T>(T x, string propertyName) where T : class
+            public bool checkObject<T>(T x, string propertyName) where T : InformationObject
             {
                 return child.checkObject(x, propertyName) ^ invert;
             }
@@ -148,12 +148,12 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
                 return $"{val}";
             }
 
-            public bool checkObject<T>(T x, string propertyName) where T : class
+            public bool checkObject<T>(T x, string propertyName) where T : InformationObject
             {
                 return checkProperty(x, propertyName, val.val);
             }
 
-            public bool checkProperty<T>(T curr, string propertyName, string x) where T : class
+            public bool checkProperty<T>(T curr, string propertyName, string x) where T : InformationObject
             {
                 List<string> candidates = new List<string>();
                 if (propertyName.Contains('.') == false)
