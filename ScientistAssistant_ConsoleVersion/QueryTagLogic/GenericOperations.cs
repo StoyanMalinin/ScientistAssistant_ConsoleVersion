@@ -64,10 +64,36 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             List<LogicNode> requirements = new List<LogicNode>();
             foreach (string f in properties)
             {
-                Console.Write($"Requiremets for {f}: ");
-                string s = Console.ReadLine();
+                LogicNode logicTree = null;
+                
+                while(true)
+                {
+                    try
+                    {
+                        Console.Write($"Requiremets for {f}: ");
+                        string s = Console.ReadLine();
 
-                requirements.Add(LogicConstructor.constructLogicTree(s));
+                        logicTree = LogicConstructor.constructLogicTree(s);
+                    }
+                    catch(ExpressionException e)
+                    {
+                        Console.WriteLine("Invalid expression");
+                        Console.WriteLine(e.Message);
+
+                        continue;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Invalid expression");
+                        Console.WriteLine("Reason - unknown");
+
+                        continue;
+                    }
+
+                    break;
+                }
+
+                requirements.Add(logicTree);
                 Console.WriteLine($"A more explicit version: {requirements.Last()}");
             }
 

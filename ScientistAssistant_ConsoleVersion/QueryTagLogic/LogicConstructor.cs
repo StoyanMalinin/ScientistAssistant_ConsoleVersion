@@ -303,12 +303,63 @@ namespace ScientistAssistant_ConsoleVersion.QueryTagLogic
             return l;
         }
 
-        //add actions for invalid expressions
+        private static void checkExpression(List<ExpressionTerm> parsed)
+        {
+            int balance = 0;
+            foreach(ExpressionTerm et in parsed)
+            {
+                if(et.GetType()==typeof(Bracket))
+                {
+                    if ((et as Bracket).type == '(') balance++;
+                    else balance--;
+                }
+
+                if (balance < 0) throw new InvalidBracketSequenceExeption();
+            }
+            if (balance != 0) throw new InvalidBracketSequenceExeption();
+
+            if(parsed[0].GetType()==typeof(Operation) && (parsed[0] as Operation).type!='!') 
+                    throw new BinaryOperatorCannotTakeTwoArgumentsException();
+            if (parsed.Last().GetType() == typeof(Operation) && (parsed.Last() as Operation).type != '!') 
+                    throw new BinaryOperatorCannotTakeTwoArgumentsException();
+            for(int i = 1;i<parsed.Count-1;i++)
+            {
+                if(parsed[i].GetType() == typeof(Operation) && (parsed[i] as Operation).type != '!')
+                {
+                    if(parsed[i-1].GetType() == typeof(Operation))
+                        throw new BinaryOperatorCannotTakeTwoArgumentsException();
+                    if (parsed[i + 1].GetType() == typeof(Operation) && (parsed[i+1] as Operation).type != '!')
+                        throw new BinaryOperatorCannotTakeTwoArgumentsException();
+                }
+            }
+
+            if (parsed.Last().GetType() == typeof(Operation) && (parsed.Last() as Operation).type == '!')
+                throw new UnaryOperatorCannotTakeOneArgumentException();
+            for (int i = 0; i < parsed.Count - 1; i++)
+            {
+                if (parsed[i].GetType() == typeof(Operation) && (parsed[i] as Operation).type == '!')
+                {
+                    if (parsed[i + 1].GetType() == typeof(Operation))
+                        throw new UnaryOperatorCannotTakeOneArgumentException();
+                }
+            }
+
+            for (int i = 1; i < parsed.Count; i++)
+            {
+                if (parsed[i].GetType() == typeof(Operation) && (parsed[i] as Operation).type == '!')
+                {
+                    if (parsed[i - 1].GetType() == typeof(Value))
+                        throw new UnaryOperatorTakesTwoArgumentsException();
+                }
+            }
+        }
+
         public static LogicNode constructLogicTree(string s)
         {
             List<ExpressionTerm> parsed = parseString(s);
+            checkExpression(parsed);
+
             LogicNode root = rec(0, parsed.Count - 1, parsed);
-            
             return root;
         }
     }
