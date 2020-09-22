@@ -8,6 +8,7 @@ using ScientistAssistant_ConsoleVersion.QueryTagLogic;
 using ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses;
 using System.Data;
 using ScientistAssistant_ConsoleVersion.UI;
+using System.Net.Http.Headers;
 
 namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
 {
@@ -55,20 +56,18 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.Queries.PrintQuery
         public PrintEventsQuery()
         {
             mp.addFun("properties", GenericOperations.filterListByProperties);
-        }
-
-        private void printList(List <Event> l)
-        {
-            foreach (Event e in l)
-                Console.WriteLine(e.ToString());
+            mp.addFun("position", GenericOperations.filterListByPosition);
         }
 
         public void execute(List<string> flags)
         {
+            flags = GenericOperations.removeRepeatingElements(flags).ToList();
+            bool fullInfo = GenericOperations.checkForFullInfo(flags);
+            
             List<Event> matching = EONETDataset.events;
             matching = GenericOperations.filterList(matching, flags, mp);
 
-            printList(matching);
+            GenericOperations.printList(matching, fullInfo);
             Console.WriteLine($"MatchingCount: {matching.Count}");
         }
     }

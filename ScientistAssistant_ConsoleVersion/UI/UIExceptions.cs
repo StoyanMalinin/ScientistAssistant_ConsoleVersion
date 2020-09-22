@@ -25,7 +25,8 @@ namespace ScientistAssistant_ConsoleVersion.UI
 
     class WrongFlagException : CustomUIException
     {
-        public WrongFlagException() { }
+        public WrongFlagException() 
+        : base("Invalid flag(s)"){ }
         public WrongFlagException(string flag)
         : base($"{'"'}{flag}{'"'} is not a valid flag for the current command") { }
     }

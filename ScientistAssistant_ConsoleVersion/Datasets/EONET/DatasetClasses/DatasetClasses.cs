@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScientistAssistant_ConsoleVersion.QueryTagLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -38,21 +39,58 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
          
             return output;
         }
+
+        private bool checkInsideRectInternal(double minLatitude, double maxLatitude,
+                                             double minLongtitude, double maxLongtitude,
+                                             Newtonsoft.Json.Linq.JArray arr)
+        {
+            if (arr.Count == 0) return true;
+            if(arr[0].GetType()==typeof(Newtonsoft.Json.Linq.JArray))
+            {
+                bool fail = false;
+                foreach(Newtonsoft.Json.Linq.JArray item in arr)
+                {
+                    if(checkInsideRectInternal(minLatitude, maxLatitude, minLongtitude, maxLongtitude, item)==false)
+                    {
+                        fail = true;
+                        break;
+                    }
+                }
+
+                if (fail == false) return true;
+                return false;
+            }
+
+            if(minLongtitude<=(double)arr[0] && (double)arr[0]<=maxLongtitude)
+            {
+                if (minLatitude <= (double)arr[1] && (double)arr[1] <= maxLatitude)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool checkInsideRect(double minLatitude, double maxLatitude,
+                                    double minLongtitude, double maxLongtitude)
+        {
+            return checkInsideRectInternal(minLatitude, maxLatitude, minLongtitude, maxLongtitude, coordinates);
+        }
     }
 
-    class Category
+    class Category : InformationObject
     {
         public string id { get; set; }
         public string title { get; set; }
     }
 
-    class Source
+    class Source : InformationObject
     {
         public string id { get; set; }
         public string url { get; set; }
     }
 
-    class Event
+    class Event : InformationObject
     {
         public string id { get; set; }
         public string title { get; set; }
@@ -62,6 +100,23 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET.DatasetClasses
         public List<Source> sources { get; set; }
         public List<Geometry> geometry { get; set; }
         public List<Category> categories { get; set; }
+
+        public bool checkInsideRect(double minLatitude, double maxLatitude, 
+                                    double minLongtitude, double maxLongtitude, int cnt)
+        {
+            bool fail = false;
+            for(int i = 0;i<Math.Min(geometry.Count, cnt);i++)
+            {
+                if(geometry[i].checkInsideRect(minLatitude, maxLatitude, minLongtitude, maxLongtitude)==false)
+                {
+                    fail = true;
+                    break;
+                }
+            }
+
+            if (fail == false) return true;
+            return false;
+        }
 
         public override string ToString()
         {
