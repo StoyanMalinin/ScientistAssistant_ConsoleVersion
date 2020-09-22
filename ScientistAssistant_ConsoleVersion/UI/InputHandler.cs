@@ -8,7 +8,6 @@ using ScientistAssistant_ConsoleVersion.UI;
 
 namespace ScientistAssistant_ConsoleVersion.UI
 {
-    //add actions for invalid commands
     class InputHandler
     {
         Dictionary<string, IDataset> datasets = new Dictionary<string, IDataset>();

@@ -62,9 +62,6 @@ namespace ScientistAssistant_ConsoleVersion.Datasets.EONET
 
         public static List <Event> getCurrentEvents()
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //watch.Stop();
-
             EventsWrapper ew = getJSONObject<EventsWrapper>(new CancellationToken(), apiV3EventsUrl).Result;
             return ew.events.ToList();
         }
